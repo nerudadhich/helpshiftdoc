@@ -62,4 +62,46 @@ sudo du -cha --max-depth=1 / | grep -E "M|G"
 
 7. After running the `redis-server` I have created redis.conf file and setup redis AUTH
 
-8. and also created `init.d/redis_6379` script to start redis server
+8. and also created `init.d/redis_6379` script to start redis server with below content
+
+```
+#!/bin/sh
+
+REDISPORT=6379
+EXEC=/usr/bin/redis-server
+CLIEXEC=/usr/bin/redis-cli
+
+PIDFILE=/var/run/redis_server.pid
+CONF="/etc/redis/redis.conf"
+
+case "$1" in
+    start)
+        if [ -f $PIDFILE ]
+        then
+                echo "$PIDFILE exists, process is already running or crashed"
+        else
+                echo "Starting Redis server..."
+                $EXEC $CONF
+        fi
+        ;;
+    stop)
+        if [ ! -f $PIDFILE ]
+        then
+                echo "$PIDFILE does not exist, process is not running"
+        else
+                PID=$(cat $PIDFILE)
+                echo "Stopping ..."
+                $CLIEXEC -p $REDISPORT shutdown
+                while [ -x /proc/${PID} ]
+                do
+                    echo "Waiting for Redis to shutdown ..."
+                    sleep 1
+                done
+                echo "Redis stopped"
+        fi
+        ;;
+    *)
+        echo "Please use start or stop as first argument"
+        ;;
+esac
+```
