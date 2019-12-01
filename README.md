@@ -105,3 +105,16 @@ case "$1" in
         ;;
 esac
 ```
+
+9. After this i have run the redis server and set the keys
+
+
+```
+testuser@ip-172-33-4-192:~$ sudo /etc/init.d/redis_6379 start
+Starting Redis server...
+testuser@ip-172-33-4-192:~$ redis-cli set testkey 1
+OK
+testuser@ip-172-33-4-192:~$ redis-cli get testkey
+"1"
+
+```
