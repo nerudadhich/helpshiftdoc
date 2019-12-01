@@ -7,7 +7,7 @@
 
 3. I have ran `df -h` and found that `/` is 100% full.
 
-4. Then I have try get all top large files and checked size of `/`
+4. Then I have try to get all top large files and checked size of `/` using below commands
 
 
 ```
@@ -35,11 +35,12 @@ sudo du -cha --max-depth=1 / | grep -E "M|G"
    After looking at this output I thought that the issue is something else and then i googled and find out that space is not freed from disk even after deleting files
 
    `sudo lsof | grep deleted`
-   Then followed this link
+   
+   Then i found this link and followed it
 
     https://access.redhat.com/solutions/2316
 
-5. After this I was able to install redis-server
+5. After this disk is freed I was able to install redis-server.
 
 6. Now I tried to run redis-server but port was alredy and find out that a `nc` process is using the port
 
@@ -60,7 +61,53 @@ sudo du -cha --max-depth=1 / | grep -E "M|G"
     
     `cat /etc/iptables/rules.v4  -> edited the file and ACCPETED the 6379 port`
 
-7. After running the `redis-server` I have created redis.conf file and setup redis AUTH
+7. After running the `redis-server` I have created redis.conf at `/etc/redis/redis.conf`
+
+```
+# Redis configuration file example
+
+daemonize yes
+
+# When running daemonized, Redis writes a pid file in /var/run/redis.pid by
+# default. You can specify a custom pid file location here.
+pidfile /var/run/redis/redis-server.pid
+
+# Accept connections on the specified port, default is 6379.
+# If port 0 is specified Redis will not listen on a TCP socket.
+port 6379
+
+bind 127.0.0.1
+
+timeout 0
+
+tcp-keepalive 0
+
+loglevel notice
+
+# Specify the log file name. Also the empty string can be used to force
+# Redis to log on the standard output. Note that if you use standard
+# output for logging but daemonize, logs will be sent to /dev/null
+logfile /mnt/redis/redis-server.log
+
+databases 2
+stop-writes-on-bgsave-error yes
+
+# Compress string objects using LZF when dump .rdb databases?
+# For default that's set to 'yes' as it's almost always a win.
+# If you want to save some CPU in the saving child set it to 'no' but
+# the dataset will likely be bigger if you have compressible values or keys.
+rdbcompression yes
+
+rdbchecksum yes
+
+# The filename where to dump the DB
+dbfilename dump.rdb
+
+# Note that you must specify a directory here, not a file name.
+dir /mnt/redis
+
+#requirepass password
+```
 
 8. and also created `init.d/redis_6379` script to start redis server with below content
 
