@@ -1,16 +1,18 @@
 # helpshiftdoc
 
 1. Login into system using given key, faced key bad permission error and fixed using below command
-   chmod 600 key_name
+   `chmod 600 key_name`
 
-2. After Login, tried installing redis-server using `sudo apt-get install redis-server` and faced disk space issue.
+2. After Login, tried installing `redis-server` using `sudo apt-get install redis-server` and faced disk space issue.
 
-3. I have ran `df -h` and found that / is 100% full
+3. I have ran `df -h` and found that `/` is 100% full.
 
-4. Then i have try get all top large files and checked size of /
+4. Then I have try get all top large files and checked size of `/`
+
     sudo du -ah /home | sort -n -r | head -n 5
     sudo find / -type f -exec du -Sh {} + | sort -rh | head -n 5
     sudo du -cha --max-depth=1 / | grep -E "M|G"
+
 
     testuser@ip-172-33-4-192:/etc/init.d$ sudo du -cha --max-depth=1 / | grep -E "M|G"
     5.7M	/etc
@@ -37,20 +39,22 @@
 
     https://access.redhat.com/solutions/2316
 
-5. After this i was able to install redis-server
+5. After this I was able to install redis-server
 
-6. Now i tried to run redis-server but port was alredy and find out that a `nc` process is using the port
-    sudo netstat -lntp
-    sudo ps -ef | grep nc
+6. Now I tried to run redis-server but port was alredy and find out that a `nc` process is using the port
+    `sudo netstat -lntp`
+    
+    `sudo ps -ef | grep nc`
 
-    then i have stopped the nc server process
+    then i have stopped the `nc` server process
 
 6. Then I have started redis-server but not able to connect to redis-cli and after so many tries i have ran the server on different port 16379 and i was able to connect
     then i checked iptable rules and found the issue
 
-    cat /etc/init.d/iptables-persistent
-    cat /etc/iptables/rules.v4  -> edited the file and ACCPETED the 6379 port
+    `cat /etc/init.d/iptables-persistent`
+    
+    `cat /etc/iptables/rules.v4  -> edited the file and ACCPETED the 6379 port`
 
-7. After redis-server is running i have created redis.conf file and setup redis AUTH
+7. After running the `redis-server` I have created redis.conf file and setup redis AUTH
 
-8. and also created init.d/redis_6379 script to start redis server
+8. and also created `init.d/redis_6379` script to start redis server
