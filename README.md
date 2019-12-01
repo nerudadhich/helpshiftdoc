@@ -49,8 +49,13 @@
     then i have stopped the `nc` server process
 
 6. Then I have started redis-server but not able to connect to redis-cli and after so many tries i have ran the server on different port 16379 and i was able to connect
-    then i checked iptable rules and found the issue
-
+    then i checked iptable rules and found the issue.
+    
+    I have flushed the rules from iptables since it was only one DROP rule.
+    `sudo iptables -F`
+    
+    For permanent chnages
+    
     `cat /etc/init.d/iptables-persistent`
     
     `cat /etc/iptables/rules.v4  -> edited the file and ACCPETED the 6379 port`
