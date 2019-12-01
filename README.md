@@ -9,33 +9,33 @@
 
 4. Then I have try get all top large files and checked size of `/`
 
-    sudo du -ah /home | sort -n -r | head -n 5
-    sudo find / -type f -exec du -Sh {} + | sort -rh | head -n 5
-    sudo du -cha --max-depth=1 / | grep -E "M|G"
 
+```
+sudo du -ah /home | sort -n -r | head -n 5
+sudo find / -type f -exec du -Sh {} + | sort -rh | head -n 5
+sudo du -cha --max-depth=1 / | grep -E "M|G"
+```
 
-    testuser@ip-172-33-4-192:/etc/init.d$ sudo du -cha --max-depth=1 / | grep -E "M|G"
+```
+   testuser@ip-172-33-4-192:/etc/init.d$ sudo du -cha --max-depth=1 / | grep -E "M|G"
     5.7M	/etc
     224M	/var
     9.6M	/mnt
-    du: cannot access ‘/proc/1961/task/1961/fd/4’: No such file or directory
-    du: cannot access ‘/proc/1961/task/1961/fdinfo/4’: No such file or directory
-    du: cannot access ‘/proc/1961/fd/4’: No such file or directory
-    du: cannot access ‘/proc/1961/fdinfo/4’: No such file or directory
     12M	/sbin
     62M	/lib
     25M	/boot
     550M	/usr
     9.6M	/bin
     897M	/
-    897M	total
+    897M	total    
+```
+    
+   and findout that total used size of / is only 897M
 
-    and findout that total used size of / is only 897M
+   After looking at this output I thought that the issue is something else and then i googled and find out that space is not freed from disk even after deleting files
 
-    After looking at this output I thought that the issue is something else and then i googled and find out that space is not freed from disk even after deleting files
-
-    `sudo lsof | grep deleted`
-    Then followed this link
+   `sudo lsof | grep deleted`
+   Then followed this link
 
     https://access.redhat.com/solutions/2316
 
