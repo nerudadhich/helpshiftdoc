@@ -42,8 +42,8 @@ sudo du -cha --max-depth=1 / | grep -E "M|G"
 5. After this I was able to install redis-server
 
 6. Now I tried to run redis-server but port was alredy and find out that a `nc` process is using the port
-    `sudo netstat -lntp`
-    
+
+    `sudo netstat -lntp`    
     `sudo ps -ef | grep nc`
 
     then i have stopped the `nc` server process
